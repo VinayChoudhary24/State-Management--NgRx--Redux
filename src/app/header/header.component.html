@@ -1,0 +1,59 @@
+<!-- This is the NAVIGATION BAR  -->
+<!-- <nav></nav> this bootstrap Class will Style the Header -- The way we added it, the Navbar will collapse on smaller screens. Since we didn't implement a Hamburger menu, that means that there's no way of accessing our links on smaller screens.  -->
+<nav class="navbar navbar-default">
+    <!-- The container-fluid class arranges the Items from Left with little Margin -->
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="#" class="navbar-brand">Recipe Book</a>
+        </div>
+        <!-- THis Section Contains the LINKS -->
+        <div class="collapse navbar-collapse">
+            <!-- UNORDERED LIST of the Links -->
+            <ul class="nav navbar-nav">
+                <!-- Li, to Arrange the Items inside Automatically -->
+                <!-- FOR RECIPES -->
+                <!-- After routing added, we dont need this  -->
+                <!-- <li><a href="#" (click)="onSelect('recipe')">Recipes</a></li> -->
+
+                <!-- This is for the Authentication -->
+                <li 
+                routerLinkActive="active" *ngIf="!isAuthenticated">
+                <a routerLink="/auth">Sign-up/Login</a>
+                </li>
+                <!-- For Recipes LINK/route -->
+                <!-- Add routerLinkActive directive to show/Style the Current Active Class -->
+                <li 
+                routerLinkActive="active" *ngIf="isAuthenticated">
+                <a routerLink="/recipes">Recipes</a>
+                </li>
+
+                <!-- FOR SHOPPING LIST -->
+                <!-- <li><a href="#" (click)="onSelect('shopping-list')">Shopping List</a></li> -->
+
+                <!-- For Shopping-list LINK/route -->
+                <li 
+                routerLinkActive="active">
+                <a routerLink="/shopping-list">Shopping List</a>
+                </li>
+
+            </ul>
+            <!--  -->
+            <!-- navbar-right Will Arrange the Items in the Right Side of the Header -->
+            <ul class="nav navbar-nav navbar-right">
+                <!-- The LogOut Button -->
+                <li *ngIf="isAuthenticated">
+                    <a style="cursor: pointer;" (click)="onLogout()">Logout</a>
+                </li>
+                <li class="dropdown" appDropdown *ngIf="isAuthenticated">
+                    <!-- This is the Dropdown Arrow and Class of CARET will give us the  Dropdown Arrow -->
+                    <a style="cursor: pointer;" class="dropdown-toggle" role="button" >Manage <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a style="cursor: pointer;" (click)="onSaveData()">Save Data</a></li>
+                        <li><a style="cursor: pointer;" (click)="onFetchData()">Fetch Data</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
