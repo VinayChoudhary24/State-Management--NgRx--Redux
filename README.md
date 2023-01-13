@@ -1,30 +1,46 @@
-# Vist the Website
-URL-- https://online-food-order-app-40d46.web.app/shopping-list
+## NgRx -- Redux
+   # -- State Management in BIGGER Angular Applications.
+   # REDUX -- State Management Pattern, also a Library to Help implement the Pattern in any Application.
 
-# OnlineFoodOrderApp
+## RxJS, Helps with State Management(PARTLY) by Using SUBJECTS, OBSERVABLES, EVENTEMITTER and OPERATORS to transform Data.
+   
+   ## Issues with RxJS Approach
+     *1 -- State can be Updated Anywhere
+     *2 -- State is (Possibly) Mutable
+     *3 -- Handling Side Effects (e.g. Http Calls/Requests) is unclear
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.4.
+## NgRx -- Redux State Management Flow
+    *Global Store / App Store / Central Store -- This Store Holds the Application State i.e it Contains all the Required Data which is needed by other Components and Services of Application.
 
-## Development server
+    *Components and Services -- They RECIEVES their state from the Global Store.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+    *DISPATCH - ACTIONS -- dispatch Actions to Change the State of Components and Services, dispatch is called always inside components and Services.
 
-## Code scaffolding
+    *Actions are JS Objects with Identifiers (payload)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+    * REDUCERS -- Actions are sent to Reducers, 
+                 --reducers are FUNCTIONS Which gets the Current State From the Global Store and actions From the Components and Services as INPUT
+                 --reducers REDUCES / COMBINES State, Updates the App State with the Help of Identifiers in an IMMUTABLE WAY.
+                 --IMMUTABLE WAY, Copying the State and Changing that Copied State
+                 --Ultimately Reducers returns a NEW State i.e Copy of the Old State changed According to the Actions
+                 --NEW State, This New State is Forwarded to the Global Store as Reduces State (Immutably)    
 
-## Build
+## NgRx Advantages to Normal Redux
+  #1 -- Integrated into Angular.
+  #2 -- Uses RxJS and TypeScript
+  #3 -- Can LISTEN to Side Effects (Http, perform something)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+### STEPS TO IMPLEMENT NgRx IN PROJECT
+   #1- Install the NgRx Package, -npm install --save @ngrx/store --it will give all the Core Features.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+   #2- Creating Component Specific Reducers File in Specific Store Folder i.e shopping-list.reducer.ts
 
-## Running end-to-end tests
+   #3- Creating Component Specific Actions File in Specific Store Folder i.e shopping-list.actions.ts
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+   #4- Import StoreModule in app.module.ts
 
-## Further help
+   #5- Import Store in Component to DISPATCH actions
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+   ## Loop Over Observables
+      *ngFor="let ingredient of (ingredients | async).ingredients; let i = index"
