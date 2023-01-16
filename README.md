@@ -30,8 +30,26 @@
   #2 -- Uses RxJS and TypeScript
   #3 -- Can LISTEN to Side Effects (Http, perform something)
 
+### Error While Working With NgRx
+  #1- module '"@angular/core"' has no exported member 'environmentproviders'
+      #Solution
+      *1- Update angular.json
+                           "defaultProject": "MyProjectName",
+                            // ADD schematics
+                            "schematics": {
+                              "@angular-eslint/schematics:application": {
+                                "setParserOptionsProject": true
+                              },
+                              "@angular-eslint/schematics:library": {
+                                "setParserOptionsProject": true
+                              }
+                            }
+      *2- Updating the Whole Project
+                 --Install check-update --npm install -g npm-check-updates
+                 --Run --ncu and Run -ncu -u && -npm install --force
 
-### STEPS TO IMPLEMENT NgRx IN PROJECT
+   
+### STEPS TO IMPLEMENT NgRx IN PROJECT 
    #1- Install the NgRx Package, -npm install --save @ngrx/store --it will give all the Core Features.
 
    #2- Creating Component Specific Reducers File in Specific Store Folder i.e shopping-list.reducer.ts
@@ -41,6 +59,8 @@
    #4- Import StoreModule in app.module.ts
 
    #5- Import Store in Component to DISPATCH actions
+
+### PROCESS [ ACTION => REDDUCER => COMPONENT ]
 
    ## Loop Over Observables
       *ngFor="let ingredient of (ingredients | async).ingredients; let i = index"

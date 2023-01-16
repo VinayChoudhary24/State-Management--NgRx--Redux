@@ -7,22 +7,22 @@
             <a href="#" class="navbar-brand">Recipe Book</a>
         </div>
         <!-- THis Section Contains the LINKS -->
-        <div class="collapse navbar-collapse">
+        <div class="container">
             <!-- UNORDERED LIST of the Links -->
-            <ul class="nav navbar-nav">
+            <ul class="nav">
                 <!-- Li, to Arrange the Items inside Automatically -->
                 <!-- FOR RECIPES -->
                 <!-- After routing added, we dont need this  -->
                 <!-- <li><a href="#" (click)="onSelect('recipe')">Recipes</a></li> -->
 
                 <!-- This is for the Authentication -->
-                <li 
+                <li class="nav-item"
                 routerLinkActive="active" *ngIf="!isAuthenticated">
                 <a routerLink="/auth">Sign-up/Login</a>
                 </li>
                 <!-- For Recipes LINK/route -->
                 <!-- Add routerLinkActive directive to show/Style the Current Active Class -->
-                <li 
+                <li class="nav-item"
                 routerLinkActive="active" *ngIf="isAuthenticated">
                 <a routerLink="/recipes">Recipes</a>
                 </li>
@@ -31,7 +31,7 @@
                 <!-- <li><a href="#" (click)="onSelect('shopping-list')">Shopping List</a></li> -->
 
                 <!-- For Shopping-list LINK/route -->
-                <li 
+                <li class="nav-item"
                 routerLinkActive="active">
                 <a routerLink="/shopping-list">Shopping List</a>
                 </li>
@@ -39,19 +39,25 @@
             </ul>
             <!--  -->
             <!-- navbar-right Will Arrange the Items in the Right Side of the Header -->
-            <ul class="nav navbar-nav navbar-right">
+              <ul class="nav justify-content-end user-details">
                 <!-- The LogOut Button -->
-                <li *ngIf="isAuthenticated">
-                    <a style="cursor: pointer;" (click)="onLogout()">Logout</a>
+                <li class="nav-item" *ngIf="isAuthenticated">
+                  <a style="cursor: pointer;" (click)="onLogout()">Logout</a>
                 </li>
-                <li class="dropdown" appDropdown *ngIf="isAuthenticated">
+
+                <li class="user-menu" *ngIf="isAuthenticated">
+                  <div class="dropdown">
                     <!-- This is the Dropdown Arrow and Class of CARET will give us the  Dropdown Arrow -->
-                    <a style="cursor: pointer;" class="dropdown-toggle" role="button" >Manage <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
+                    <a style="cursor: pointer;" class="btn btn-secondary dropdown-toggle" id="dropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Manage</a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li>
-                            <a style="cursor: pointer;" (click)="onSaveData()">Save Data</a></li>
-                        <li><a style="cursor: pointer;" (click)="onFetchData()">Fetch Data</a></li>
+                            <a class="dropdown-item" style="cursor: pointer;" (click)="onSaveData()">Save Data</a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" style="cursor: pointer;" (click)="onFetchData()">Fetch Data</a>
+                        </li>
                     </ul>
+                  </div>
                 </li>
             </ul>
         </div>

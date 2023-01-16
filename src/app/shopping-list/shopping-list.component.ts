@@ -4,6 +4,11 @@ import { Observable, Subscription } from 'rxjs';
 import { Ingredient } from '../shared/ingredients.model';
 import { ShoppingListService } from './shopping-list.service';
 
+import * as ShoppingListActions from './store/shopping-list.actions';
+// To Get the State
+// Standard Naming Convention
+import * as fromShoppingList from './store/shopping-list.reducer';
+
 @Component({
   selector: 'app-shopping-list',
   templateUrl: './shopping-list.component.html',
@@ -16,13 +21,15 @@ export class ShoppingListComponent implements OnInit {
   // Store the Subject Observable to Clean it Up i.e DESTROY
   private subscription: Subscription;
 
-  constructor( private slService: ShoppingListService, private store: Store<{ shoppingList: { ingredients: Ingredient[] }}> ) { }
+  // private store: Store<{ shoppingList: { ingredients: Ingredient[] }}> for Single Store
+  constructor( private slService: ShoppingListService, private store: Store<fromShoppingList.AppState> ) { }
 
   ngOnInit() {
-    // NgRx
+    // Adding Through NgRx
     // Use .select method to get the Slice of the State
     this.ingredients = this.store.select('shoppingList');
 
+    // Adding Through Services
     // this.ingredients = this.slService.getIngredients();
     // Store the Subscription in the Variable/Property
     // this.subscription = this.slService.ingredientChanged
@@ -34,8 +41,12 @@ export class ShoppingListComponent implements OnInit {
 
   // To edit the Items in the Shopping List
   onEditItem(index: number) {
-    this.slService.startedEditing.next(index);
-  }
+    // Editing Through Services
+    // this.slService.startedEditing.next(index);
+
+    // Editing Through NgRx
+    this.store.dispatch(new ShoppingListActions.StartEdit(index))
+  };
 
   // Destroyin the Subject Event
   // ngOnDestroy() {
