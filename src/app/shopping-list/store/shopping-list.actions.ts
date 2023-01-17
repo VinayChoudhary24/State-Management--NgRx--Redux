@@ -3,23 +3,24 @@ import { Action } from '@ngrx/store';
 import { Ingredient } from 'src/app/shared/ingredients.model';
 
 // This is a Standard Naming Convention
+// [Shopping List] is Will Make Sure the Identifier is Unique Across the App
 // This is the IDENTIFIER to Add a Ingredient in Shopping-List
-export const ADD_INGREDIENT = 'ADD_INGREDIENT';
+export const ADD_INGREDIENT = '[Shopping List] Add Ingredient';
 
 // This is the IDENTIFIER to Add Ingredients from recipe-list to Shopping-list
-export const ADD_INGREDIENTS = 'ADD_INGREDIENTS';
+export const ADD_INGREDIENTS = '[Shopping List] Add Ingredients';
 
 // This is the IDENTIFIER to Update Ingredients in Shopping-list
-export const UPDATE_INGREDIENT = 'UPDATE_INGREDIENT';
+export const UPDATE_INGREDIENT = '[Shopping List] Update Ingredient';
 
 // This is the IDENTIFIER to Delete Ingredients in Shopping-list
-export const DELETE_INGREDIENT = 'DELETE_INGREDIENT';
+export const DELETE_INGREDIENT = '[Shopping List] Delete Ingredient';
 
 // To Start the Editing in Shopping-List
-export const START_EDIT = 'START_EDIT';
+export const START_EDIT = '[Shopping List] Start Edit';
 
 // To Stop the Editing in Shopping-List
-export const STOP_EDIT = 'STOP_EDIT';
+export const STOP_EDIT = '[Shopping List] Stop Edit';
 
 //Describing the Action i.e Objects with type
 // Action to Add a Ingredient
@@ -28,7 +29,7 @@ export class AddIngredient implements Action {
   // readonly TS Feature
   readonly type = ADD_INGREDIENT;
 
-  // The Action
+  // The Action to Attach Data
   constructor( public payload: Ingredient ) {}
 }
 
@@ -39,7 +40,7 @@ export class AddIngredients implements Action {
   // readonly TS Feature
   readonly type = ADD_INGREDIENTS;
 
-  // The Action
+  // The Action to Attach Data
   constructor( public payload: Ingredient[] ) {}
 }
 
@@ -50,7 +51,7 @@ export class UpdateIngredient implements Action {
   // readonly TS Feature
   readonly type = UPDATE_INGREDIENT;
 
-  // The Action
+  // The Action to Attach Data
   constructor( public payload: Ingredient ) {}
 }
 
@@ -69,7 +70,7 @@ export class StartEdit implements Action {
   // readonly TS Feature
   readonly type = START_EDIT;
 
-  // The Action
+  // The Action to Attach Data
   constructor( public payload: number ) {}
 }
 

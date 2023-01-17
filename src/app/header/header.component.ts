@@ -1,7 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Subscription } from "rxjs";
+import { Store } from "@ngrx/store";
+import { map, Subscription } from "rxjs";
 import { AuthService } from "../auth/auth.service";
 import { DataStorageService } from "../shared/Http-data-storage.service";
+
+// 
+import * as fromApp from '../store/app.reducer';
 
 @Component({
     selector: 'app-header',
@@ -19,11 +23,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // To access the Http Request 
     constructor( private dataStorageService: DataStorageService,
         // To TRACk the STATE of the User  
-        private authService: AuthService ) {}
+        private authService: AuthService, private store: Store<fromApp.AppState> ) {}
 
         // To Initialize the User State when page Loads
         ngOnInit(): void {
-            this.userSub = this.authService.user.subscribe( (user) => {
+            // this.userSub = this.authService.user.subscribe( (user) => {
+
+            // Through NgRx
+            // Use .select method to get the Slice of the State
+            this.userSub = this.store.select('auth').pipe(map( authState => authState.user )).subscribe( (user) => {
+
                 this.isAuthenticated = !user ? false : true;
                 // this.isAuthenticated = !!user;
                 // We can also replace this !user ? false : true; with !!user

@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { Ingredient } from '../shared/ingredients.model';
-import { ShoppingListService } from './shopping-list.service';
+// import { ShoppingListService } from './shopping-list.service';
 
+// Access all Actions
 import * as ShoppingListActions from './store/shopping-list.actions';
-// To Get the State
+
+// To Get the shopping list State from Global Store
 // Standard Naming Convention
-import * as fromShoppingList from './store/shopping-list.reducer';
+import * as fromApp from '../store/app.reducer';
 
 @Component({
   selector: 'app-shopping-list',
@@ -21,8 +23,9 @@ export class ShoppingListComponent implements OnInit {
   // Store the Subject Observable to Clean it Up i.e DESTROY
   private subscription: Subscription;
 
+  // private slService: ShoppingListService,
   // private store: Store<{ shoppingList: { ingredients: Ingredient[] }}> for Single Store
-  constructor( private slService: ShoppingListService, private store: Store<fromShoppingList.AppState> ) { }
+  constructor( private store: Store<fromApp.AppState> ) { }
 
   ngOnInit() {
     // Adding Through NgRx

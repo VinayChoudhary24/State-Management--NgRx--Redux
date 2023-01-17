@@ -12,11 +12,6 @@ export interface State {
   editedIngredientIndex: number,
 }
 
-// Entire Application State
-export interface AppState {
-  shoppingList: State
-}
-
 // initialState of Component before it is Changed
 // Always a JS Object
 const initialState: State = {
@@ -114,7 +109,8 @@ export function shoppingListReducer(state: State = initialState, action: Shoppin
         editedIngredient: null
       };
 
-
+      // EXTREMELY IMPORTANT DEFAULT CASE
+      // This Handles the Actions Not Present in This Reducer i.e If a Action is Dispatched from Auth not Related to Shopping List, This Default Case is Initialized to Maintain the AppState.
     default:
     return state;
   }

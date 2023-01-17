@@ -5,14 +5,17 @@ import { Store } from "@ngrx/store";
 import { Subject } from "rxjs";
 // import { Subject } from "rxjs";
 import { Ingredient } from "../shared/ingredients.model";
-import { ShoppingListService } from "../shopping-list/shopping-list.service";
+
+// import { ShoppingListService } from "../shopping-list/shopping-list.service";
+
 import { Recipe } from "./recipe.model";
 
-
+// Access all the Actions
 import * as ShoppingListActions from '../shopping-list/store/shopping-list.actions';
-// To Get the State
+
+// To Get the Shopping List State from Global Store
 // Standard Naming Convention
-import * as fromShoppingList from '../shopping-list/store/shopping-list.reducer';
+import * as fromApp from '../store/app.reducer';
 
 // Use @Injectable to Access/Inject the Shopping List Service Here
 @Injectable()
@@ -83,10 +86,13 @@ export class RecipeService {
         new Ingredient('Coke', 2)
     ]),
   ];
+                    // OR
+  // private recipes: Recipe[] = [];
 
 //   Add Constructor to Use the Shopping List Service
+// private slService: ShoppingListService, 
 // private store: Store<{ shoppingList: { ingredients: Ingredient[] }}> for Single
-constructor( private slService: ShoppingListService, private store: Store<fromShoppingList.AppState> ) {}
+constructor( private store: Store<fromApp.AppState> ) {}
 
 // This will Update the RecipesList Section when we Fetch from Database i.e Click fetch Data
 setRecipes(recipes: Recipe[]) {

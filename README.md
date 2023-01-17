@@ -60,7 +60,18 @@
 
    #5- Import Store in Component to DISPATCH actions
 
+### SETUP -- The Initial Set-Up Requires a lot of Time and Effort with NgRx as Compare to Services but After the Completion of Initial Set-up it is FAST to GROW the Application with NgRx. 
 ### PROCESS [ ACTION => REDDUCER => COMPONENT ]
 
    ## Loop Over Observables
       *ngFor="let ingredient of (ingredients | async).ingredients; let i = index"
+
+## APP STATE -- Creating a GLOBAL/ROOT STORE for Application State [app.reducer.ts, app.actions.ts]
+
+## IMPORTANCE OF ACTIONS -- Any Action we DISPATCH will Always reach to ALL REDUCERS. #VERY IMPORTANT NOTE
+# This is the way Different Actions Connects to Reducers All Over the APP.
+
+### AUTHENTICATION WITH NgRx
+   #1 - Create a Store for Auth inside the Auth Folder. [auth.reducer.ts, auth.actions.ts]
+
+   #2 - 

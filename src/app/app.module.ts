@@ -8,7 +8,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http'
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
-import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer';
+
+// Import the GLOBAL STORE
+import * as fromApp from './store/app.reducer';
 
 @NgModule({
   //## For All the Components of the Application
@@ -28,8 +30,8 @@ import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer
     HttpClientModule,
 
     // For NgRx
-    // .forRoot is for Defining the Reducers
-    StoreModule.forRoot({shoppingList: shoppingListReducer}),
+    // .forRoot is for Defining ALL Reducers
+    StoreModule.forRoot(fromApp.appReducer),
 
     // Import app-routing.module
     AppRoutingModule,

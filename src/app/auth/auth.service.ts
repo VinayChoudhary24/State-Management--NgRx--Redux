@@ -7,6 +7,13 @@ import { Router } from "@angular/router";
 
 // For Environment Variables to Load from environment.ts and prod.ts and Replace the key value with this 
 import { environment } from "src/environments/environment";
+import { Store } from "@ngrx/store";
+
+// get the AppState
+import * as fromApp from '../store/app.reducer';
+
+// Access all Actions
+import * as AuthActions from './store/auth.actions';
 
 // This is the Response that we will get from FIREBASE after the SignUp/Login Request
 // The Response Data for SignUp and Login is almost same, with the ONLY difference is the REGISTERED key which is the response for the Login
@@ -27,7 +34,7 @@ export interface AuthResponseData {
 
 export class AuthService {
     // We use BehaviorSubject here to Store and also UPDATE the Token with Every Update 
-    user = new BehaviorSubject<User>(null);
+    // user = new BehaviorSubject<User>(null);
 
     // To store the Token Expiration
     private tokenExpirationTimer: any;
@@ -35,7 +42,10 @@ export class AuthService {
     // The HttpClient
     constructor( private http: HttpClient,
         // Inject router to navigate after Logout
-        private router: Router ) {}
+        private router: Router, 
+        // Inject Store to use Login and Logout Actions
+        private store: Store<fromApp.AppState>
+        ) {}
 
     signUp(email: string, password: string) {
         return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.firebaseAPIKey, {
@@ -83,7 +93,18 @@ export class AuthService {
 
         // Check if the User has a Valid Token
         if(loadedUser.token) {
-            this.user.next(loadedUser);
+          // Changing user State Through RxJS i.e Service [Subject, Observables ...]
+            // this.user.next(loadedUser);
+
+            // Changing User State Through NgRx
+            this.store.dispatch(new AuthActions.login(
+              {
+                email: loadedUser.email,
+                userId: loadedUser.id,
+                token: loadedUser.token,
+                expirationDate: new Date(userData._tokenExpirationDate)
+              }
+            ))
 
             // calling the AutoLogout method
             const expirationDuration =  new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
@@ -93,7 +114,11 @@ export class AuthService {
 
     // To logout the User 
     logout() {
-        this.user.next(null);
+      // Changing user State Through RxJS i.e Service [Subject, Observables ...]
+        // this.user.next(null);
+
+        // Changing User State Through NgRx
+        this.store.dispatch(new AuthActions.logout());
         this.router.navigate(['/auth']);
         
         // Clear the Snapshot after logout i.e user data from loaclStorage
@@ -125,7 +150,19 @@ export class AuthService {
                 expirationDate);
                 
                 //use next
-                this.user.next(user);
+                // Changing user State Through RxJS i.e Service [Subject, Observables ...]
+                // this.user.next(user);
+
+                // Through NgRx
+                this.store.dispatch(new AuthActions.login(
+                  {
+                    email: email,
+                    userId: userId,
+                    token: token,
+                    expirationDate
+                  }
+                  ))
+
                 // calling the AutoLogout method 
                 this.autoLogout(expiresIn * 1000);
         
