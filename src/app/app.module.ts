@@ -12,6 +12,9 @@ import { CoreModule } from './core.module';
 // Import the GLOBAL STORE
 import * as fromApp from './store/app.reducer';
 
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './auth/store/auth.effects';
+
 @NgModule({
   //## For All the Components of the Application
   declarations: [
@@ -32,6 +35,9 @@ import * as fromApp from './store/app.reducer';
     // For NgRx
     // .forRoot is for Defining ALL Reducers
     StoreModule.forRoot(fromApp.appReducer),
+
+    // For NgRx Effects
+    EffectsModule.forRoot([AuthEffects]),
 
     // Import app-routing.module
     AppRoutingModule,

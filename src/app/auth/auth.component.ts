@@ -3,6 +3,10 @@ import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { AuthResponseData, AuthService } from "./auth.service";
+import { Store } from '@ngrx/store';
+
+import * as fromApp from '../store/app.reducer';
+import * as AuthActions from './store/auth.actions';
 
 @Component({
     selector: 'app-auth',
@@ -21,7 +25,7 @@ export class AuthComponent {
 
     constructor( private authService: AuthService,
         // Inject Router to Track the State of the User
-                 private router: Router ) {}
+                private router: Router, private store: Store<fromApp.AppState> ) {}
 
     // Method to swith Modes
     onSwitchMode() {
@@ -44,8 +48,18 @@ export class AuthComponent {
         this.isLoading = true;
         // 
         if(this.isLoginMode) {
+          // Through Services
             // This is for the LOGIN Functionality
-            authObs = this.authService.login(email, password);
+            // authObs = this.authService.login(email, password);
+
+            // Through NgRx
+            // Login Suer
+            this.store.dispatch(new AuthActions.LoginStart(
+              {
+                email: email,
+                password: password
+              }
+            ))
         } else {
         // the SignUp POST Request
         authObs = this.authService.signUp(email, password);

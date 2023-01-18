@@ -29,6 +29,7 @@
   #1 -- Integrated into Angular.
   #2 -- Uses RxJS and TypeScript
   #3 -- Can LISTEN to Side Effects (Http, perform something)
+  #4 -- Only Synchronous Code is Allowed, Asynch code breaks NgRx
 
 ### Error While Working With NgRx
   #1- module '"@angular/core"' has no exported member 'environmentproviders'
@@ -72,6 +73,11 @@
 # This is the way Different Actions Connects to Reducers All Over the APP.
 
 ### AUTHENTICATION WITH NgRx
-   #1 - Create a Store for Auth inside the Auth Folder. [auth.reducer.ts, auth.actions.ts]
+    * Create a Store for Auth inside the Auth Folder. [auth.reducer.ts, auth.actions.ts]
 
-   #2 - 
+    *### HANDLING SIDE EFFECTS i.e Http-Request
+          1 -- Install Side Effects Package -npm install --save @ngrx/effects
+
+          2 -- Create auth.effects.ts inside auth/store 
+
+          3 -- Import EffectsModule inside app.module.ts

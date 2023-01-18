@@ -1,5 +1,8 @@
 import { Action } from "@ngrx/store";
 
+// // This is the IDENTIFIER for Http Request
+export const LOGIN_START = '[Auth] Login Start';
+
 // This is a Standard Naming Convention
 // [Auth] is Will Make Sure the Identifier is Unique Across the App
 // This is the IDENTIFIER for user login
@@ -16,7 +19,7 @@ export class login implements Action {
   readonly type = LOGIN;
 
   // The Action to Attach Data
-  constructor( 
+  constructor(
     public payload: {
       email: string;
       userId: string;
@@ -33,6 +36,21 @@ export class logout implements Action {
   // readonly TS Feature
   readonly type = LOGOUT;
 }
+
+//Describing the Action i.e Objects with type
+// USer Login Start i.e Http Request
+export class LoginStart implements Action {
+  // Requires a type
+  // readonly TS Feature
+  readonly type = LOGIN_START;
+
+  // The Action to Attach Data
+  constructor( public payload: {
+    email: string;
+    password: string;
+  } ) {}
+}
+
 
 // Extra Export Required for the REDUCER Parameter
 // With This the Reducer can Differentiate Between Different Actions
