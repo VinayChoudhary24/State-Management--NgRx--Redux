@@ -15,6 +15,11 @@ import * as fromApp from './store/app.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './auth/store/auth.effects';
 
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
+
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+
 @NgModule({
   //## For All the Components of the Application
   declarations: [
@@ -38,6 +43,12 @@ import { AuthEffects } from './auth/store/auth.effects';
 
     // For NgRx Effects
     EffectsModule.forRoot([AuthEffects]),
+
+    // Use Store/Redux DevTools
+    StoreDevtoolsModule.instrument({ logOnly: environment.production }),
+
+    // User NgRx Router-Store
+    StoreRouterConnectingModule.forRoot(),
 
     // Import app-routing.module
     AppRoutingModule,

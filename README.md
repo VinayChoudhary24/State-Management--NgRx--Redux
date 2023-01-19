@@ -61,7 +61,9 @@
 
    #5- Import Store in Component to DISPATCH actions
 
+
 ### SETUP -- The Initial Set-Up Requires a lot of Time and Effort with NgRx as Compare to Services but After the Completion of Initial Set-up it is FAST to GROW the Application with NgRx. 
+
 ### PROCESS [ ACTION => REDDUCER => COMPONENT ]
 
    ## Loop Over Observables
@@ -69,8 +71,10 @@
 
 ## APP STATE -- Creating a GLOBAL/ROOT STORE for Application State [app.reducer.ts, app.actions.ts]
 
+
 ## IMPORTANCE OF ACTIONS -- Any Action we DISPATCH will Always reach to ALL REDUCERS. #VERY IMPORTANT NOTE
 # This is the way Different Actions Connects to Reducers All Over the APP.
+
 
 ### AUTHENTICATION WITH NgRx
     * Create a Store for Auth inside the Auth Folder. [auth.reducer.ts, auth.actions.ts]
@@ -81,3 +85,21 @@
           2 -- Create auth.effects.ts inside auth/store 
 
           3 -- Import EffectsModule inside app.module.ts
+
+
+### USING STORE/REDUX DevTools
+          1 -- Redux DevTools Extension for CHROME
+
+          2 -- Install DevTools Package -npm install --save-dev @ngrx/store-devtools
+
+          3 -- ADD import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+          4 -- ADD Inside imports[] - StoreDevtoolsModule.instrument({ logOnly: environment.production })
+
+
+### USING NgRx ROUTER PACKAGE
+         1 -- Install -npm install --save @ngrx/router-store
+
+         2 -- Add import { StoreRouterConnectingModule } from '@ngrx/router-store';
+
+         3 -- Add inside imports[] - StoreRouterConnectingModule.forRoot(),

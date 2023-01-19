@@ -6,6 +6,7 @@ import { DataStorageService } from "../shared/Http-data-storage.service";
 
 // 
 import * as fromApp from '../store/app.reducer';
+import * as AuthActions from '../auth/store/auth.actions';
 
 @Component({
     selector: 'app-header',
@@ -66,7 +67,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     // logout the user by Click
     onLogout() {
-        this.authService.logout();
+      // Logout Through Service
+        // this.authService.logout();
+
+      // Logout Through NgRx
+      this.store.dispatch(new AuthActions.Logout());
     }
 
     // Unsubscribe the State of the User

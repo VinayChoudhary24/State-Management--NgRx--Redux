@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { AuthResponseData, AuthService } from "./auth.service";
 import { Store } from '@ngrx/store';
 
@@ -13,7 +13,7 @@ import * as AuthActions from './store/auth.actions';
     templateUrl: './auth.component.html',
 })
 
-export class AuthComponent {
+export class AuthComponent implements OnInit, OnDestroy {
     // To switch between the User
     isLoginMode = true;
 
@@ -23,9 +23,25 @@ export class AuthComponent {
     // This is for the ERROR
     error: string = null;
 
+    // Handle the Subscription
+    private storeSub: Subscription;
+
     constructor( private authService: AuthService,
         // Inject Router to Track the State of the User
                 private router: Router, private store: Store<fromApp.AppState> ) {}
+
+    // 
+    ngOnInit(): void {
+      // Subscribe The Login Http Request with Select
+      // Adding Through NgRx
+    // Use .select method to get the Slice of the State
+    this.storeSub = this.store.select('auth').subscribe( authState => {
+      // set the Loading
+      this.isLoading = authState.loading;
+      // Set the Error
+      this.error = authState.authError;
+    })
+    }
 
     // Method to swith Modes
     onSwitchMode() {
@@ -42,10 +58,10 @@ export class AuthComponent {
         const password = form.value.password;
 
         // To Store the The SignUp/Login Requests and Subscribe One
-        let authObs: Observable<AuthResponseData>;
+        // let authObs: Observable<AuthResponseData>;
 
         // to show the Loading-Spinner Here
-        this.isLoading = true;
+        // this.isLoading = true;
         // 
         if(this.isLoginMode) {
           // Through Services
@@ -53,7 +69,7 @@ export class AuthComponent {
             // authObs = this.authService.login(email, password);
 
             // Through NgRx
-            // Login Suer
+            // Login User
             this.store.dispatch(new AuthActions.LoginStart(
               {
                 email: email,
@@ -61,30 +77,47 @@ export class AuthComponent {
               }
             ))
         } else {
-        // the SignUp POST Request
-        authObs = this.authService.signUp(email, password);
-        }
+            // the SignUp POST Request
+            // Through Services
+            // authObs = this.authService.signUp(email, password);
 
-        // SUBSCRIBE the SignUp/Login POST Requets
-        authObs.subscribe( (resdata) => {
-            console.log(resdata);
-            this.isLoading = false;
-            // This is the Successfull Case for SignUp/login 
-            // we Navigate the User to the recipes page after a successfull SignUp or Login
-            this.router.navigate(['/recipes']);
+            // Through NgRx
+            // Sign Up User
+            this.store.dispatch(new AuthActions.SignupStart(
+              {
+                email: email,
+                password: password
+              }
+            ))
+        };
 
-        }, (errorMessage) => {
-            console.log(errorMessage);
-            this.error = errorMessage;
-            this.isLoading = false;
-        });
+
+        // // SUBSCRIBE the SignUp/Login POST Requets
+        // authObs.subscribe( (resdata) => {
+        //     console.log(resdata);
+        //     this.isLoading = false;
+        //     // This is the Successfull Case for SignUp/login 
+        //     // we Navigate the User to the recipes page after a successfull SignUp or Login
+        //     this.router.navigate(['/recipes']);
+
+        // }, (errorMessage) => {
+        //     console.log(errorMessage);
+        //     this.error = errorMessage;
+        //     this.isLoading = false;
+        // });
 
         form.reset();
     }
     
     // Close the Alert-box
     onHandleError() {
-        this.error = null;
+        this.store.dispatch(new AuthActions.ClearError());
+    }
+
+    ngOnDestroy(): void {
+      if(this.storeSub) {
+        this.storeSub.unsubscribe();
+      }
     }
 
 }
