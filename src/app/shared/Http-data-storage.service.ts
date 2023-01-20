@@ -5,6 +5,10 @@ import { Recipe } from "../recipes/recipe.model";
 import { exhaustMap, map, take, tap } from "rxjs/operators";
 import { AuthService } from "../auth/auth.service";
 
+import { Store } from "@ngrx/store";
+import * as fromApp from '../store/app.reducer';
+import * as RecipesActions from '../recipes/store/recipe.actions';
+
 // Add Injectable to add Other Services and Providers Array
 @Injectable({
     providedIn: 'root'
@@ -17,7 +21,7 @@ export class DataStorageService {
         // to Access all the Recipes in this Servies i.e to Store and Fetch them
                 private recipeService: RecipeService,
                 // Inject AuthService to Attach Token to Every Outgoing Requets
-                private authService: AuthService ) {}
+                private authService: AuthService, private store: Store<fromApp.AppState> ) {}
 
     //To Store all the Recipes from the RecipeList Section to the FIREBASE Database...
     storeRecipes() {
@@ -27,17 +31,17 @@ export class DataStorageService {
         // To send a HttpRequest we need to SUBSCRIBE always
         .subscribe( (response) => {
             console.log(response);
-        }) 
+        })
     }
-    
+
     // To Fetch the Stored recipes from the FIREBASE Database
     fetchRecipes() {
         // To ATTACH token for Outgoing Requests
         // We use TAKE Operator to GET the user Once and not with every Request
         // we use exhaustMap Operator to Connect to OBSERVABLES i.e PIPE two Observables
-        // return this.authService.user.pipe(take(1), 
+        // return this.authService.user.pipe(take(1),
         // exhaustMap( (user) => {
-            return this.http.get<Recipe[]>('https://online-food-order-app-40d46-default-rtdb.firebaseio.com/recipes.json', 
+            return this.http.get<Recipe[]>('https://online-food-order-app-40d46-default-rtdb.firebaseio.com/recipes.json',
             // {
                 // Attach the Token to the Request
                 // params: new HttpParams().set('auth', user.token)
@@ -45,7 +49,7 @@ export class DataStorageService {
             ).pipe(
         // }),
         // Add Operator to Make sure we always fetch in a FORMAT i.e recipes with Ingredients[] Array
-        // This map is the RxJS Operator Map used with PIPE() 
+        // This map is the RxJS Operator Map used with PIPE()
         map( (recipes) => {
             // This is the Normal JS map Function
             return recipes.map( (recipe) => {
@@ -54,9 +58,13 @@ export class DataStorageService {
         }),
         // Tap method is Used here for the ResolverService
         tap( (recipes) => {
-            this.recipeService.setRecipes(recipes);
+          // hSetting Recipes Through Services
+            // this.recipeService.setRecipes(recipes);
+
+          // Through ngRx
+            this.store.dispatch(new RecipesActions.SetRecipes(recipes));
         })
-        );   
+        );
     }
 
 }

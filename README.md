@@ -64,8 +64,9 @@
 
 ### SETUP -- The Initial Set-Up Requires a lot of Time and Effort with NgRx as Compare to Services but After the Completion of Initial Set-up it is FAST to GROW the Application with NgRx. 
 
-### PROCESS [ ACTION => REDDUCER => COMPONENT ]
+### PROCESS [ DEFINE STATE IN REDUCER => ACTION => REDDUCER => COMPONENTS ]
 
+### NgRx EFFECTS PROCESS [ofType] [switchMap() - Map to observable, complete previous inner observable, emit values.]
    ## Loop Over Observables
       *ngFor="let ingredient of (ingredients | async).ingredients; let i = index"
 

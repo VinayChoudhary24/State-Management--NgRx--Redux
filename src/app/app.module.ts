@@ -14,6 +14,7 @@ import * as fromApp from './store/app.reducer';
 
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './auth/store/auth.effects';
+import { RecipeEffects } from './recipes/store/recipe.effects';
 
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
@@ -42,7 +43,7 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
     StoreModule.forRoot(fromApp.appReducer),
 
     // For NgRx Effects
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, RecipeEffects]),
 
     // Use Store/Redux DevTools
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),

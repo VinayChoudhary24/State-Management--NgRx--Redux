@@ -41,7 +41,8 @@ const handleAuthentication = (email: string, userId: string, token: string, expi
               email: email,
               userId: userId,
               token: token,
-              expirationDate: expirationDate
+              expirationDate: expirationDate,
+              redirect: true
             }
           );
 };
@@ -86,6 +87,8 @@ export class AuthEffects {
   // Attach Decorator @Effect() to Make it a Effect and Inform NgRx about Effects
   // @Effect()
   authSignup = this.actions$.pipe(
+    // ofType Operator Allows us to Filter Effects
+     // 'ofType' filters an Observable of Actions into an observable of the actions whose type strings are passed to it.
     ofType(AuthActions.SIGNUP_START),
     // switchMap Operator Allows us to Create new Observable by Taking Data from Another Observable
     switchMap( (signupAction: AuthActions.SignupStart) => {
@@ -120,6 +123,7 @@ export class AuthEffects {
   // @Effect()
   authLogin = this.actions$.pipe(
     // ofType Operator Allows us to Filter Effects
+     // 'ofType' filters an Observable of Actions into an observable of the actions whose type strings are passed to it.
     ofType(AuthActions.LOGIN_START),
     // switchMap Operator Allows us to Create new Observable by Taking Data from Another Observable
     switchMap( (authData: AuthActions.LoginStart) => {
@@ -150,10 +154,16 @@ export class AuthEffects {
   );
 
   // To NAvigate
+  // ofType Operator Allows us to Filter Effects
+     // 'ofType' filters an Observable of Actions into an observable of the actions whose type strings are passed to it.
   // @Effect({ dispatch: false })
-  authRedirect = this.actions$.pipe(ofType(AuthActions.AUTHENTICATE_SUCCESS), tap( () => {
-    this.router.navigate(['/']);
-  }));
+  authRedirect = this.actions$.pipe(ofType(AuthActions.AUTHENTICATE_SUCCESS), tap( 
+    (authSuccessAction: AuthActions.AuthenticateSuccess) => {
+      if(authSuccessAction.payload.redirect) {
+        this.router.navigate(['/']);
+      }
+    }
+  ));
 
   // Auto Login User
   // @Effect()
@@ -192,7 +202,8 @@ export class AuthEffects {
           email: loadedUser.email,
           userId: loadedUser.id,
           token: loadedUser.token,
-          expirationDate: new Date(userData._tokenExpirationDate)
+          expirationDate: new Date(userData._tokenExpirationDate),
+          redirect: false
         }
       );
     }

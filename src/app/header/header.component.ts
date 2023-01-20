@@ -7,6 +7,7 @@ import { DataStorageService } from "../shared/Http-data-storage.service";
 // 
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from '../auth/store/auth.actions';
+import * as RecipesActions from '../recipes/store/recipe.actions';
 
 @Component({
     selector: 'app-header',
@@ -57,12 +58,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     // Store the Recipes to the Database by Click Save
     onSaveData() {
-        this.dataStorageService.storeRecipes();
+      // Save Through Service
+        // this.dataStorageService.storeRecipes();
+
+      // Save Through NgRx
+      this.store.dispatch(new RecipesActions.StoreRecipes());
     }
 
     // Fetch the Recipes from the Database
     onFetchData() {
-        this.dataStorageService.fetchRecipes().subscribe();
+      // Fetching Through Services
+        // this.dataStorageService.fetchRecipes().subscribe();
+
+      // Fetching Through NgRx
+      this.store.dispatch(new RecipesActions.FetchRecipes());
     }
 
     // logout the user by Click

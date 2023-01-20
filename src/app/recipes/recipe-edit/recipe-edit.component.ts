@@ -1,14 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { RecipeService } from '../recipe.service';
+import * as fromApp from '../../store/app.reducer';
+import { map, Subscription } from 'rxjs';
+import * as RecipesActions from '../store/recipe.actions';
 
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.css']
 })
-export class RecipeEditComponent implements OnInit {
+export class RecipeEditComponent implements OnInit, OnDestroy {
 
   // Store ID
   id: number;
@@ -19,10 +23,13 @@ export class RecipeEditComponent implements OnInit {
   // For the REACTIVE Approach FORMS
   recipeForm: FormGroup;
 
+  // Clean the Subscription
+  private storeSub: Subscription;
+
   // INJECT ActivatedRoute to use the routes
   constructor( private route: ActivatedRoute,
                private recipeService: RecipeService,
-               private router: Router ) { }
+               private router: Router, private store: Store<fromApp.AppState> ) { }
 
   ngOnInit() {
     // Here we Retrieve ID and Also subscribe to react to Changes
@@ -42,9 +49,20 @@ export class RecipeEditComponent implements OnInit {
     //   this.recipeForm.value['ingredients'],
     // );
     if(this.editMode) {
-      this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+      // Update Through Service
+      // this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+
+      // Update Through NgRx
+      this.store.dispatch(new RecipesActions.UpdateRecipes({
+        index: this.id,
+        newRecipe: this.recipeForm.value
+      }))
     } else {
-      this.recipeService.addRecipe(this.recipeForm.value);
+      // Add Through Service
+      // this.recipeService.addRecipe(this.recipeForm.value);
+
+       // Add Through NgRx
+       this.store.dispatch(new RecipesActions.AddRecipe(this.recipeForm.value))
     }
     // / This will Navigate Away
     // we Need Router
@@ -85,8 +103,16 @@ export class RecipeEditComponent implements OnInit {
     let recipeIngredients = new FormArray([]);
     // To check if the user is in editMode or NOT
     if(this.editMode) {
+      // Through Services
       const recipe = this.recipeService.getRecipe(this.id);
-      recipeName = recipe.name;
+
+      // Through NgRx
+      this.storeSub = this.store.select('recipes').pipe( map( recipeState => {
+        return recipeState.recipes.find( (recipe, index) => {
+          return index === this.id;
+        })
+      })).subscribe( recipe => {
+        recipeName = recipe.name;
       recipeImagePath = recipe.imagePath;
       recipeDescription = recipe.description;
       if (recipe['ingredients']) {
@@ -99,6 +125,7 @@ export class RecipeEditComponent implements OnInit {
           )
         }
       }
+      })
     }
     this.recipeForm = new FormGroup({
       'name': new FormControl(recipeName, Validators.required),
@@ -108,5 +135,11 @@ export class RecipeEditComponent implements OnInit {
     });
   }
   
+  ngOnDestroy(): void {
+    // Check Condition is Important
+    if (this.storeSub) {
+      this.storeSub.unsubscribe();
+    }
+  }
 
 }

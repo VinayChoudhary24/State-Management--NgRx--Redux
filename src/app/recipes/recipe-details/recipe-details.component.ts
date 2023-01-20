@@ -5,6 +5,11 @@ import { RecipeService } from '../recipe.service';
 // This is for the TypeScript
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
+import { Store } from '@ngrx/store';
+import * as fromApp from '../../store/app.reducer';
+import { map, switchMap } from 'rxjs';
+import * as RecipesActions from '../store/recipe.actions';
+
 @Component({
   selector: 'app-recipe-details',
   templateUrl: './recipe-details.component.html',
@@ -26,7 +31,7 @@ export class RecipeDetailsComponent implements OnInit {
   // Add ActivatedRoute to tell the -- CURRENT PATH
   constructor( private recipeService: RecipeService,
                private route: ActivatedRoute,
-               private router: Router ) { }
+               private router: Router, private store: Store<fromApp.AppState> ) { }
 
   // there are two ways to Bind the :ID
   ngOnInit() {
@@ -34,13 +39,23 @@ export class RecipeDetailsComponent implements OnInit {
     // const id = this.route.snapshot.params['id'];
     
     // SECOND,the Perfect way to .subscribe it to Handle CHANGES
-    this.route.params.subscribe( (params: Params) => {
-      this.id = +params['id'];
+    this.route.params.pipe(map( params => {
+      return +params['id'];
+    }), switchMap( id => {
+      this.id = id;
+      // Through NgRx
+      return this.store.select('recipes');
+    }), map( recipesState => {
+      return recipesState.recipes.find( (recipe, index) => {
+        return index === this.id;
+      });
+    }))
       // Now Add id in the recipe.service component
       // Now Fetch the New recipe
-      this.recipe = this.recipeService.getRecipe(this.id);
-    })
-
+      // this.recipe = this.recipeService.getRecipe(this.id);
+    .subscribe( recipe => {
+        this.recipe = recipe;
+      });
   }
 
   // This Function will add the Recipe in the Shopping List
@@ -55,7 +70,11 @@ export class RecipeDetailsComponent implements OnInit {
 
   // This will call the deleteRecipe Method From recipe.services
   onDeleteRecipe() {
-    this.recipeService.deleteRecipe(this.id);
+    // Delete Throug Service
+    // this.recipeService.deleteRecipe(this.id);
+
+    // Delete Throug ngRx
+    this.store.dispatch(new RecipesActions.DeleteRecipes(this.id));
     // This will Navigate away after Delete Button Pressed
     this.router.navigate(['/recipes']);
   }
