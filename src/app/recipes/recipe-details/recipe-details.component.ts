@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import * as fromApp from '../../store/app.reducer';
 import { map, switchMap } from 'rxjs';
 import * as RecipesActions from '../store/recipe.actions';
+import * as ShoppingListActions from '../../shopping-list/store/shopping-list.actions';
 
 @Component({
   selector: 'app-recipe-details',
@@ -37,7 +38,7 @@ export class RecipeDetailsComponent implements OnInit {
   ngOnInit() {
     // FIRST, if we Click Only Once
     // const id = this.route.snapshot.params['id'];
-    
+
     // SECOND,the Perfect way to .subscribe it to Handle CHANGES
     this.route.params.pipe(map( params => {
       return +params['id'];
@@ -60,7 +61,11 @@ export class RecipeDetailsComponent implements OnInit {
 
   // This Function will add the Recipe in the Shopping List
   onAddToShoppingList() {
-    this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
+    // Through Sservices
+    // this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
+
+    // Through NgRx
+    this.store.dispatch(new ShoppingListActions.AddIngredients(this.recipe.ingredients));
   }
 
   // This function will edit the Recipe when clicked on edit button

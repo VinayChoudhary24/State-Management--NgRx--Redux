@@ -72,6 +72,9 @@
 
 ## APP STATE -- Creating a GLOBAL/ROOT STORE for Application State [app.reducer.ts, app.actions.ts]
 
+### CODE INSIDE EFFECTS -- ASYNCH CODE and any SIDE EFFECTS 
+### CODE INSIDE REDUCERS -- ALL STATE CHANGES CODE
+
 
 ## IMPORTANCE OF ACTIONS -- Any Action we DISPATCH will Always reach to ALL REDUCERS. #VERY IMPORTANT NOTE
 # This is the way Different Actions Connects to Reducers All Over the APP.
